@@ -20,6 +20,7 @@ class job
                             size_type> resource_bulk_t;
         typedef std::pair<  resource_t ,
                             size_type> resource_elem_t;
+        typedef double date_t;
 
         job()=default;
         job(number_t J_nb,
@@ -54,6 +55,16 @@ class job
         void set_predecessors(std::vector<number_t> pdcs) { predecessors = pdcs; }
         std::vector<number_t> get_predecessors() const { return predecessors; }
 
+        void set_es(date_t es) { earliest_start = es; }
+        void set_ef(date_t ef) { earliest_finish = ef; }
+        void set_ls(date_t ls) { latest_start = ls; }
+        void set_lf(date_t lf) { latest_finish = lf; }
+        job::number_t get_no() const { return job_nb; }
+        date_t get_es() const { return earliest_start; }
+        date_t get_ef() const { return earliest_finish; }
+        date_t get_ls() const { return latest_start; }
+        date_t get_lf() const { return latest_finish; }
+
         std::ostream& print(std::ostream& );
         std::string toString() const ;
 
@@ -63,6 +74,10 @@ class job
         std::vector<number_t> predecessors;
         duration_t duration;
         resource_bulk_t required_resources;
+        date_t earliest_start;// 最早开始时间
+        date_t earliest_finish;// 最早结束时间
+        date_t latest_start;// 最晚开始时间
+        date_t latest_finish;// 最晚结束时间
 };
 // >>>information loader<<<
 class infor_loader
