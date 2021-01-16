@@ -55,10 +55,22 @@ class job
 		void set_predecessors(std::vector<number_t> pdcs) { predecessors = pdcs; }
 		std::vector<number_t> get_predecessors() const { return predecessors; }
 
-		void set_es(date_t es) { earliest_start = es; }
-		void set_ef(date_t ef) { earliest_finish = ef; }
-		void set_ls(date_t ls) { latest_start = ls; }
-		void set_lf(date_t lf) { latest_finish = lf; }
+		job& set_es(date_t es) {
+			earliest_start = es;
+			return *this; 
+		}
+		job& set_ef(date_t ef) {
+			earliest_finish = ef;
+			return *this; 
+		}
+		job& set_ls(date_t ls) { 
+			latest_start = ls;
+			return *this;
+		}
+		job& set_lf(date_t lf) {
+			latest_finish = lf;
+			return *this;
+		}
 		job::number_t get_no() const { return job_nb; }
 		date_t get_es() const { return earliest_start; }
 		date_t get_ef() const { return earliest_finish; }
