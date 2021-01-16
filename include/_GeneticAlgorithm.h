@@ -3,6 +3,7 @@
 # include"_BaseGeneticAlgorithm.h"
 # include<vector>
 # include<map>
+# include<list>
 namespace _HeuristicAlgorithm
 {
 class chromosome;
@@ -33,7 +34,7 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
     bool eligible(const no_job_t& ,const _DataLoad::job& );
     std::vector<_DataLoad::job::number_t> topological_sort(chromosome ind);// tempral constrain
     no_job_t evaluate( std::vector<_DataLoad::job::number_t> topological_sort_res,
-                        const chromosome& gene);
+                        const chromosome& gene);// resource constrain
 };
 class chromosome
 {
@@ -47,5 +48,22 @@ class chromosome
     std::vector<int> MChromosome;
     double val;
 };
+namespace time_concept{
+
+class time_bucket{
+    public:
+    typedef std::list<time_bucket> time_line;
+    typedef _DataLoad::job::date_t date_t;
+    time_bucket(date_t begin_,date_t end_):begin(begin_),end(end_){}
+    void set_begin(date_t begin_) { begin = begin_; }
+    void set_end(date_t end_) { end = end_; }
+    date_t get_begin() { return begin; }
+    date_t get_end() { return end; }
+    private:
+    date_t begin;
+    date_t end;
+};
+
+}// time_concept
 }// _HeuristicAlgorithm
 # endif
