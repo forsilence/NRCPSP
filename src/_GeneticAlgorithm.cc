@@ -46,7 +46,7 @@ std::vector<_DataLoad::job::number_t> GeneticAlgorithm::topological_sort(chromos
 	no_job_t sorted_activities;
 	std::vector<_DataLoad::job::number_t> schedule_order;
 
-	// push the activities 0 to sorted activities and remove from free_activities
+	// push the activities 1 to sorted activities and remove from free_activities
 	no_job_t::iterator deleter_for_free_activities = free_activities.find(0);
 	sorted_activities.emplace(deleter_for_free_activities->first,
 															deleter_for_free_activities->second);
@@ -66,7 +66,7 @@ std::vector<_DataLoad::job::number_t> GeneticAlgorithm::topological_sort(chromos
 
 	// init cut set
 	cut_set_t cut_set;
-	update_cut_set(sorted_activities,cut_set,0);
+	update_cut_set(sorted_activities,cut_set,1);
 	while(sorted_activities.size() != ind.size()){
 		deleter_for_free_activities = max_priority(priority_queue,ind);
 		if(deleter_for_free_activities!=priority_queue.end()){
@@ -147,11 +147,89 @@ bool GeneticAlgorithm::eligible(const no_job_t& sorted_activities,const _DataLoa
 }
 
 // need to finish
-GeneticAlgorithm::no_job_t GeneticAlgorithm::evaluate(  std::vector<_DataLoad::job::number_t> topological_sort_res,
-                                                        const chromosome& gene)
+GeneticAlgorithm::no_job_t GeneticAlgorithm::evaluate(  
+	std::vector<_DataLoad::job::number_t> topological_sort_res,
+  const chromosome& gene)
 {
 	no_job_t all_jobs = get_all_jobs_map();
 	_DataLoad::job::resource_bulk_t limited_resources = get_resources();
+	std::map<_DataLoad::job::resource_t,time_concept::time_bucket::time_line>
+		time_line_for_resources;
+	no_job_t scheduled_activities;
+	// set time for activities 1 
+	no_job_t::iterator current_activity_iterator = all_jobs.find(1);
+	current_activity_iterator->second.set_es(0).set_ef(0);
+	scheduled_activities.emplace(
+		current_activity_iterator->first,
+		current_activity_iterator->second);
+	for(int activity_location=1 ; 
+			activity_location<topological_sort_res.size(); 
+			++activity_location){
+		current_activity_iterator = all_jobs.find(topological_sort_res[activity_location]);
+		set_time( current_activity_iterator->second,
+							time_line_for_resources,
+							scheduled_activities);
+		scheduled_activities.emplace(
+			current_activity_iterator->first,
+			current_activity_iterator->second);
+	}
+	return scheduled_activities;
+}
+
+void GeneticAlgorithm::set_time(_DataLoad::job& activity,
+							std::map<_DataLoad::job::resource_t,
+								time_concept::time_bucket::time_line>& time_line_for_resource,
+							const no_job_t& scheduled_activities)
+{
+	auto limited_resources = get_resources();
+	// find predecessors for activity
+	std::vector<_DataLoad::job::number_t> pres = activity.get_predecessors();
+	auto pre_with_max_earlist_finish_time = scheduled_activities.find(pres[0]);
+	auto iterator_to_cmp_with_PWMEFT = pre_with_max_earlist_finish_time;
+	++iterator_to_cmp_with_PWMEFT ;
+	for ( int count=1;
+				count<pres.size() && iterator_to_cmp_with_PWMEFT!=scheduled_activities.end();
+				++count){
+		if(iterator_to_cmp_with_PWMEFT->second.get_ef() > 
+			pre_with_max_earlist_finish_time->second.get_ef()){
+				pre_with_max_earlist_finish_time = iterator_to_cmp_with_PWMEFT;
+			}
+	}
+	// set earlies start time and earliest finish time for current activity
+	time_concept::time_bucket::date_t earliest_start_time = pre_with_max_earlist_finish_time->second.get_ef();
+	for(auto it=time_line_for_resource.begin() ; it != time_line_for_resource.end() ; ++it){
+		if(activity.get_required_resources().at(it->first)!=0){
+			if( !it->second.empty() ){
+				time_concept::time_bucket::time_line::iterator tmp_date = it->second.begin();
+				while(tmp_date != it->second.end() && earliest_start_time >= tmp_date->get_end() ){
+					++tmp_date;
+				}
+				while(tmp_date != it->second.end() && 
+							earliest_start_time + activity.get_duration() > tmp_date->get_begin()){
+								if(tmp_date->get_holding_resource_size()+ activity.get_required_resources().at(it->first) > 
+									limited_resources.at(it->first) && earliest_start_time < tmp_date->get_end()){
+										earliest_start_time = tmp_date->get_end();
+								}
+								++tmp_date;
+				}
+			}
+		}
+	}
+	activity.set_es(earliest_start_time).set_ef(earliest_start_time+activity.get_duration());
+
+	for(auto it=time_line_for_resource.begin() ; it != time_line_for_resource.end() ; ++it){
+		if(activity.get_required_resources().at(it->first)!=0){
+			if( !it->second.empty() ){
+				time_concept::time_bucket::time_line tmp_time_line;
+				auto iterator_for_tmp_date_new = it->second.begin();
+				while(iterator_for_tmp_date_new != it->second.end() && 
+							earliest_start_time >= iterator_for_tmp_date_new->get_end()){
+								++iterator_for_tmp_date_new;
+				}
+				auto keep_iter_loc = iterator_for_tmp_date_new;
+			}
+		}
+	}
 }
 
 // >>>chromosome<<<

@@ -35,6 +35,10 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 	std::vector<_DataLoad::job::number_t> topological_sort(chromosome ind);// tempral constrain
 	no_job_t evaluate( std::vector<_DataLoad::job::number_t> topological_sort_res,
 											const chromosome& gene);// resource constrain
+	void set_time(_DataLoad::job& activity,
+								std::map<_DataLoad::job::resource_t,
+									time_concept::time_bucket::time_line>& time_line_for_resource,
+								const no_job_t& scheduled_activities);
 };
 class chromosome
 {
@@ -55,13 +59,25 @@ class time_bucket{
 	typedef std::list<time_bucket> time_line;
 	typedef _DataLoad::job::date_t date_t;
 	time_bucket(date_t begin_,date_t end_):begin(begin_),end(end_){}
-	void set_begin(date_t begin_) { begin = begin_; }
-	void set_end(date_t end_) { end = end_; }
+	time_bucket& set_begin(date_t begin_) { 
+		begin = begin_;
+		return *this;
+	}
+	time_bucket& set_end(date_t end_) { 
+		end = end_;
+		return *this;
+	}
+	time_bucket& set_holding_resource_size(std::size_t size_){
+		holding_resource_size = size_;
+		return *this;
+	}
 	date_t get_begin() { return begin; }
 	date_t get_end() { return end; }
+	std::size_t get_holding_resource_size() const { return holding_resource_size; }
 	private:
 	date_t begin;
 	date_t end;
+	std::size_t holding_resource_size;
 };
 
 }// time_concept
