@@ -2,6 +2,7 @@
 # include<ctime>
 # include<vector>
 # include<iostream>
+# include<iterator>
 namespace _HeuristicAlgorithm
 {
 void GeneticAlgorithm::run()
@@ -196,14 +197,17 @@ void GeneticAlgorithm::set_time(_DataLoad::job& activity,
 			}
 	}
 	// set earlies start time and earliest finish time for current activity
+	// to satisfy resource-constrain
 	time_concept::time_bucket::date_t earliest_start_time = pre_with_max_earlist_finish_time->second.get_ef();
 	for(auto it=time_line_for_resource.begin() ; it != time_line_for_resource.end() ; ++it){
 		if(activity.get_required_resources().at(it->first)!=0){
 			if( !it->second.empty() ){
 				time_concept::time_bucket::time_line::iterator tmp_date = it->second.begin();
+				// find the time_bucket of the resource with the min val in which has bigger value of end than earliest start time 
 				while(tmp_date != it->second.end() && earliest_start_time >= tmp_date->get_end() ){
 					++tmp_date;
 				}
+				// if there is any confliction about resource change the earliest start time
 				while(tmp_date != it->second.end() && 
 							earliest_start_time + activity.get_duration() > tmp_date->get_begin()){
 								if(tmp_date->get_holding_resource_size()+ activity.get_required_resources().at(it->first) > 
@@ -217,16 +221,95 @@ void GeneticAlgorithm::set_time(_DataLoad::job& activity,
 	}
 	activity.set_es(earliest_start_time).set_ef(earliest_start_time+activity.get_duration());
 
+	// set time for resources
 	for(auto it=time_line_for_resource.begin() ; it != time_line_for_resource.end() ; ++it){
 		if(activity.get_required_resources().at(it->first)!=0){
 			if( !it->second.empty() ){
 				time_concept::time_bucket::time_line tmp_time_line;
-				auto iterator_for_tmp_date_new = it->second.begin();
-				while(iterator_for_tmp_date_new != it->second.end() && 
-							earliest_start_time >= iterator_for_tmp_date_new->get_end()){
-								++iterator_for_tmp_date_new;
+				auto iterator_for_tmp_date_start = it->second.begin();
+				while(iterator_for_tmp_date_start != it->second.end() && 
+							earliest_start_time >= iterator_for_tmp_date_start->get_end()){
+								++iterator_for_tmp_date_start;
 				}
+				auto iterator_for_tmp_date_new = iterator_for_tmp_date_start;
 				auto keep_iter_loc = iterator_for_tmp_date_new;
+				while(iterator_for_tmp_date_new != it->second.end()){
+					if(earliest_start_time + activity.get_duration() > iterator_for_tmp_date_new->get_begin()){
+						tmp_time_line.push_back(*iterator_for_tmp_date_new);
+						++iterator_for_tmp_date_new;
+					}else{
+						break;
+					}
+				}
+				time_concept::time_bucket::time_line time_line_for_split;
+				time_concept::time_bucket::date_t walking_time = earliest_start_time;
+				std::size_t cur_resource_size = activity.get_required_resources().at(it->first);
+				for(auto i=iterator_for_tmp_date_start ; i!=iterator_for_tmp_date_new ; ++i){
+					if(walking_time > i->get_end()){
+						std::insert_iterator<time_concept::time_bucket::time_line> time_insert_iterator(it->second,i);
+						if(earliest_start_time + activity.get_duration() < i->get_end()){
+							auto behind_time = *i;
+							auto middle_time = *i;
+							behind_time.set_end(walking_time);
+							middle_time.set_begin(walking_time)
+							.set_end(earliest_start_time+activity
+							.get_duration())
+							.set_holding_resource_size(middle_time.get_holding_resource_size()+cur_resource_size);
+							i->set_begin(earliest_start_time+activity.get_duration());
+							time_insert_iterator = behind_time;
+							time_insert_iterator = middle_time;
+							walking_time = i->get_end();
+						}else{
+							auto behind_time = *i;
+							behind_time.set_end(walking_time);
+							i->set_begin(walking_time).set_holding_resource_size(i->get_holding_resource_size() + cur_resource_size);
+							time_insert_iterator = behind_time;
+							walking_time = i->get_end();
+						}
+					}else if (walking_time == i->get_begin()){
+						std::insert_iterator<time_concept::time_bucket::time_line> time_insert_iterator(it->second,i);
+						if(earliest_start_time+activity.get_duration() < i->get_end()){
+							auto behind_time = *i;
+							behind_time.set_end(earliest_start_time+activity.get_duration())
+							.set_holding_resource_size(i->get_holding_resource_size() + cur_resource_size);
+							i->set_begin(earliest_start_time+activity.get_duration());
+							time_insert_iterator = behind_time;
+							walking_time = i->get_end();
+						}else{
+							i->set_holding_resource_size(i->get_holding_resource_size() + cur_resource_size);
+							walking_time = i->get_end();
+						}
+					}else{
+						std::insert_iterator<time_concept::time_bucket::time_line> time_insert_iterator(it->second,i);
+						if(earliest_start_time+ activity.get_duration() < i->get_end()){
+							auto behind_time = *i;
+							auto middle_time = *i;
+							behind_time.set_begin(walking_time)
+							.set_end(middle_time.get_begin())
+							.set_holding_resource_size(cur_resource_size);
+							middle_time.set_end(earliest_start_time+activity.get_duration())
+							.set_holding_resource_size(middle_time.get_holding_resource_size()+cur_resource_size);
+							i->set_begin(earliest_start_time+activity.get_duration());
+							time_insert_iterator = behind_time;
+							time_insert_iterator = middle_time;
+							walking_time = i->get_end();
+						}else{
+							auto behind_time = *i;
+							behind_time.set_begin(walking_time)
+							.set_end(i->get_begin())
+							.set_holding_resource_size(cur_resource_size);
+							i->set_holding_resource_size(i->get_holding_resource_size()+cur_resource_size);
+							time_insert_iterator = behind_time;
+							walking_time = i->get_end();
+						}
+					}
+				}
+				if( walking_time < earliest_start_time + activity.get_duration()){
+					std::insert_iterator<time_concept::time_bucket::time_line> time_insert_iterator(it->second,iterator_for_tmp_date_new);
+					time_concept::time_bucket last_time(walking_time,earliest_start_time+activity.get_duration());
+					last_time.set_holding_resource_size(cur_resource_size);
+					time_insert_iterator = last_time;
+				}
 			}
 		}
 	}
