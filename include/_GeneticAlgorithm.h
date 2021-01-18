@@ -7,6 +7,33 @@
 namespace _HeuristicAlgorithm
 {
 class chromosome;
+namespace time_concept{
+class time_bucket{
+	public:
+	typedef std::list<time_bucket> time_line;
+	typedef _DataLoad::job::date_t date_t;
+	time_bucket(date_t begin_,date_t end_):begin(begin_),end(end_){}
+	time_bucket& set_begin(date_t begin_) { 
+		begin = begin_;
+		return *this;
+	}
+	time_bucket& set_end(date_t end_) { 
+		end = end_;
+		return *this;
+	}
+	time_bucket& set_holding_resource_size(std::size_t size_){
+		holding_resource_size = size_;
+		return *this;
+	}
+	date_t get_begin() { return begin; }
+	date_t get_end() { return end; }
+	std::size_t get_holding_resource_size() const { return holding_resource_size; }
+	private:
+	date_t begin;
+	date_t end;
+	std::size_t holding_resource_size;
+};
+}// time_concept
 class GeneticAlgorithm: public BaseGeneticAlgorithm
 {
 	public:
@@ -15,7 +42,6 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 	GeneticAlgorithm();
 	GeneticAlgorithm(const int popSize_);
 	GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_);
-	GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_,const double crossoverP_);
 	virtual void run() override;
 
 	population_t initPop(size_t popSize);
@@ -53,32 +79,6 @@ class chromosome
 	double val;
 };
 namespace time_concept{
-
-class time_bucket{
-	public:
-	typedef std::list<time_bucket> time_line;
-	typedef _DataLoad::job::date_t date_t;
-	time_bucket(date_t begin_,date_t end_):begin(begin_),end(end_){}
-	time_bucket& set_begin(date_t begin_) { 
-		begin = begin_;
-		return *this;
-	}
-	time_bucket& set_end(date_t end_) { 
-		end = end_;
-		return *this;
-	}
-	time_bucket& set_holding_resource_size(std::size_t size_){
-		holding_resource_size = size_;
-		return *this;
-	}
-	date_t get_begin() { return begin; }
-	date_t get_end() { return end; }
-	std::size_t get_holding_resource_size() const { return holding_resource_size; }
-	private:
-	date_t begin;
-	date_t end;
-	std::size_t holding_resource_size;
-};
 
 }// time_concept
 }// _HeuristicAlgorithm

@@ -135,7 +135,7 @@ class HeuristicAlgorithmBase: public _DataLoad::infor_loader
 {
     public:
     HeuristicAlgorithmBase() = default;
-    virtual void run() = 0;
+    virtual void run();
     void setLogWriterPath(std::string );
     void logWriteIn(std::string );
     void setLogBufferSize(size_t BSize);

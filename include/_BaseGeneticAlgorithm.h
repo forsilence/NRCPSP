@@ -12,7 +12,6 @@ BaseGeneticAlgorithm();
 BaseGeneticAlgorithm(const int popSize_);
 BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_);
 BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_,const double crossoverP_);
-virtual void run() override;
 
 void setPopSize(int const popSize_);
 void setMaxGeneration(int const maxGeneration_);

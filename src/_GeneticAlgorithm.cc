@@ -5,6 +5,9 @@
 # include<iterator>
 namespace _HeuristicAlgorithm
 {
+GeneticAlgorithm::GeneticAlgorithm():BaseGeneticAlgorithm(){}
+GeneticAlgorithm::GeneticAlgorithm(const int popSize_):BaseGeneticAlgorithm(popSize_){}
+GeneticAlgorithm::GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_):BaseGeneticAlgorithm(popSize_,maxGeneration_,mutateP_){}
 void GeneticAlgorithm::run()
 {
 	std::cout << ">>> GeneticAlgorithm <<<" << std::endl;
