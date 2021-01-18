@@ -211,11 +211,14 @@ void text_writer::in_to_file()
 	std::ofstream outfile;
 	if(file_name.empty()){
 			std::cerr << "You have not set the file to write in,please set the file!" << std::endl;
-			exit(1);
-	}
-	outfile.open(file_name,std::ofstream::app);
-	for(buffer_type it:buffer_pool){
-		outfile << it << std::endl;
+			for(buffer_type it:buffer_pool){
+				std::cout << it << std::endl;
+			}
+	}else{
+		outfile.open(file_name,std::ofstream::app);
+		for(buffer_type it:buffer_pool){
+			outfile << it << std::endl;
+		}
 	}
 	outfile.close();
 	buffer_pool.clear();
