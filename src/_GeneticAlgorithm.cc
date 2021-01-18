@@ -37,8 +37,8 @@ void GeneticAlgorithm::run()
 double GeneticAlgorithm::schedule(chromosome ind)
 {
 	std::vector<_DataLoad::job::number_t> ts = topological_sort(ind);
-
-	return 0;
+	auto res = evaluate(ts,ind);
+	return res.rbegin()->second.get_ef();
 }
 std::vector<_DataLoad::job::number_t> GeneticAlgorithm::topological_sort(chromosome ind)
 {
@@ -48,7 +48,7 @@ std::vector<_DataLoad::job::number_t> GeneticAlgorithm::topological_sort(chromos
 	std::vector<_DataLoad::job::number_t> schedule_order;
 
 	// push the activities 1 to sorted activities and remove from free_activities
-	no_job_t::iterator deleter_for_free_activities = free_activities.find(0);
+	no_job_t::iterator deleter_for_free_activities = free_activities.find(1);
 	sorted_activities.emplace(deleter_for_free_activities->first,
 															deleter_for_free_activities->second);
 	schedule_order.push_back(deleter_for_free_activities->first);
