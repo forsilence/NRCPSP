@@ -69,8 +69,9 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 class chromosome
 {
 	public:
+	chromosome(std::size_t size_):MChromosome(size_){}
 	int& operator[](size_t location);
-	int operator[](size_t location) const ;
+	const int& operator[](size_t location) const ;
 	void setVal(double val_);
 	double getVal() const;
 	std::size_t size() const;

@@ -279,4 +279,7 @@ double HeuristicAlgorithmBase::Uniform(double min_,double max_)
 	double standar  =  rand()/32767.0;
 	return distance*standar + min_ ;
 }
+void HeuristicAlgorithmBase::run(){
+	std::cout << "HeuristicAlforithmBase::run" << std::endl;
+}
 }// _HeuristicAlgorithm
