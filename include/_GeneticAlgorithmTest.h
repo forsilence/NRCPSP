@@ -9,6 +9,10 @@ class GAScheduleTest: public TestBase{
   public:
   void run_test() override ;
 };
+class GAInitPopTest: public TestBase{
+  public:
+  void run_test() override ;
+};
 } // namespace Test
 
 } // namespace _HeuristicAlgorithm
