@@ -165,8 +165,12 @@ GeneticAlgorithm::no_job_t GeneticAlgorithm::evaluate(
 {
 	no_job_t all_jobs = get_all_jobs_map();
 	_DataLoad::job::resource_bulk_t limited_resources = get_resources();
+	// init resource time line
 	std::map<_DataLoad::job::resource_t,time_concept::time_bucket::time_line>
 		time_line_for_resources;
+	for(auto limited_resource:limited_resources){
+		time_line_for_resources.emplace(limited_resource.first,time_concept::time_bucket::time_line());
+	}
 	no_job_t scheduled_activities;
 	// set time for activities 1 
 	no_job_t::iterator current_activity_iterator = all_jobs.find(1);
@@ -321,6 +325,10 @@ void GeneticAlgorithm::set_time(_DataLoad::job& activity,
 					last_time.set_holding_resource_size(cur_resource_size);
 					time_insert_iterator = last_time;
 				}
+			}else{
+				time_concept::time_bucket first_time_bucket(activity.get_es(),activity.get_ef());
+				first_time_bucket.set_holding_resource_size(activity.get_required_resources().at(it->first));
+				it->second.push_back(first_time_bucket);
 			}
 		}
 	}
