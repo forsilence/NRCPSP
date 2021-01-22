@@ -141,6 +141,7 @@ class HeuristicAlgorithmBase: public _DataLoad::infor_loader
     void logWriteIn(std::string );
     void setLogBufferSize(size_t BSize);
     double Uniform(double min_,double max_);
+		unsigned InitRandomSeed();
     private:
     _M_th::text_writer logWriter;
 };

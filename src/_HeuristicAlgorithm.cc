@@ -2,6 +2,8 @@
 # include<iostream>
 # include<sstream>
 # include<algorithm>
+# include<cstdlib>
+# include<ctime>
 namespace _HeuristicAlgorithm
 {
 namespace _DataLoad
@@ -289,5 +291,10 @@ double HeuristicAlgorithmBase::Uniform(double min_,double max_)
 }
 void HeuristicAlgorithmBase::run(){
 	std::cout << "HeuristicAlforithmBase::run" << std::endl;
+}
+unsigned HeuristicAlgorithmBase::InitRandomSeed(){
+	unsigned random_seed = (unsigned)time(NULL)*20;
+	srand(random_seed);
+	return random_seed;
 }
 }// _HeuristicAlgorithm
