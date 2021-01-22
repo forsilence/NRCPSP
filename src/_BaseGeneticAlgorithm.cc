@@ -4,14 +4,14 @@
 namespace _HeuristicAlgorithm
 {
 // constructors
-BaseGeneticAlgorithm::BaseGeneticAlgorithm():popSize(10),maxGeneration(40),mutateP(0.01),crossoverP(0.8){}
+BaseGeneticAlgorithm::BaseGeneticAlgorithm():HeuristicAlgorithmBase(),popSize(10),maxGeneration(40),mutateP(0.01),crossoverP(0.8){}
 BaseGeneticAlgorithm::BaseGeneticAlgorithm(const int popSize_):BaseGeneticAlgorithm()
 {
 	popSize = popSize_;
 }
-BaseGeneticAlgorithm::BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_):
+BaseGeneticAlgorithm::BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_):HeuristicAlgorithmBase(),
                                 popSize(popSize_),maxGeneration(maxGeneration_),mutateP(mutateP_){}
-BaseGeneticAlgorithm::BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_,const double crossoverP_):
+BaseGeneticAlgorithm::BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_,const double crossoverP_):HeuristicAlgorithmBase(),
                                 popSize(popSize_),maxGeneration(maxGeneration_),mutateP(mutateP_),crossoverP(crossoverP_){}
 // >>>set params for genetic algorithm<<<
 // set
