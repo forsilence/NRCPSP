@@ -13,6 +13,10 @@ class GAInitPopTest: public TestBase{
   public:
   void run_test() override ;
 };
+class GASelectParents: public TestBase{
+  public:
+  void run_test() override ;
+};
 } // namespace Test
 
 } // namespace _HeuristicAlgorithm
