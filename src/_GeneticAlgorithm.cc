@@ -364,6 +364,39 @@ GeneticAlgorithm::population_t GeneticAlgorithm::initPop(
 	return pop;
 }
 
+GeneticAlgorithm::population_t GeneticAlgorithm::selectParents(const population_t& pop){
+	double sum = 0;
+	for(const population_t::value_type& it:pop){
+		sum += it.getVal();
+	}
+	double random_val_for_p1 = Uniform(0,1);
+	double random_val_for_p2 = random_val_for_p1;
+	while(random_val_for_p1 == random_val_for_p2) {
+		random_val_for_p2 = Uniform(0,1);
+	}
+	std::vector<double> probability_inds(pop.size());
+	for(int ind=0 ; ind<pop.size(); ++ind){
+		probability_inds[ind] = pop[ind].getVal()/sum ;
+	}
+	population_t selected_parents;
+	sum = 0;
+	for(int ind=0 ; ind<pop.size(); ++ind){
+		if(random_val_for_p1>sum && random_val_for_p1<sum+probability_inds[ind]){
+			selected_parents.push_back(pop[ind]);
+		}
+		if(random_val_for_p2>sum && random_val_for_p2<sum+probability_inds[ind]){
+			selected_parents.push_back(pop[ind]);
+		}
+		sum += probability_inds[ind];
+	}
+	int count = 2 - selected_parents.size();
+	while(count){
+		selected_parents.push_back(pop[pop.size()-count]);
+		--count;
+	}
+	return selected_parents;
+}
+
 // >>>chromosome<<<
 int& chromosome::operator[](size_t location)
 {

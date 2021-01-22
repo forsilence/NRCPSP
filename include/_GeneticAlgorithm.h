@@ -60,7 +60,7 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 	virtual population_t initPop(size_t popSize,std::size_t chromosome_size);
 	double schedule(chromosome ind);
 	double objectiveFunction(chromosome& ind);
-	population_t selectParents(population_t pop);
+	virtual population_t selectParents(const population_t& pop);
 	population_t crossover(population_t selectedParents);
 	chromosome mutate(chromosome& ind,double mutateP);
 	population_t popSort(population_t pop);
