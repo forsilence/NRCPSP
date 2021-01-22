@@ -51,6 +51,14 @@ std::string job::toString() const
 	}
 	return str;
 }
+std::string job::date_format() const {
+	std::string str;
+	str += std::to_string(job_nb)+" " 
+	+ std::to_string(earliest_start) + " "
+	+ std::to_string(earliest_finish);
+	return str;
+}
+
 void infor_loader::load(std::string path)
 {
 	std::string file_type_dot_sm = ".sm";

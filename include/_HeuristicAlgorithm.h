@@ -54,6 +54,7 @@ class job
 		void set_required_resources(resource_bulk_t rrs) { required_resources = rrs; }
 		void set_predecessors(std::vector<number_t> pdcs) { predecessors = pdcs; }
 		std::vector<number_t> get_predecessors() const { return predecessors; }
+		std::string date_format() const;
 
 		job& set_es(date_t es) {
 			earliest_start = es;
