@@ -177,9 +177,9 @@ void text_writer::set_file(std::string name)
 	while(true)
 	{
 			size_t tmp = name.find(" ");
-			if(tmp = std::string::npos) break;
-			else if(tmp=0) name = name.substr(1,name.size()-1);
-			else if(tmp=name.size()-1) name = name.substr(0,name.size()-1);
+			if(tmp == std::string::npos) break;
+			else if(tmp==0) name = name.substr(1,name.size()-1);
+			else if(tmp==name.size()-1) name = name.substr(0,name.size()-1);
 			else
 			{
 					std::cerr << "file can not have \" \" , you should set name as consecutive char!" << std::endl;
@@ -201,7 +201,7 @@ void text_writer::write_in(std::string text)
 // destructor
 text_writer::~text_writer()
 {
-	if(!file_name.empty()){
+	if(!buffer_pool.empty()){
 		in_to_file();
 	}
 }
@@ -219,8 +219,8 @@ void text_writer::in_to_file()
 		for(buffer_type it:buffer_pool){
 			outfile << it << std::endl;
 		}
+		outfile.close();
 	}
-	outfile.close();
 	buffer_pool.clear();
 }
 
