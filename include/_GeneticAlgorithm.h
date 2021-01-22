@@ -6,7 +6,20 @@
 # include<list>
 namespace _HeuristicAlgorithm
 {
-class chromosome;
+class chromosome
+{
+	public:
+	chromosome(std::size_t size_):MChromosome(size_){}
+	int& operator[](size_t location);
+	const int& operator[](size_t location) const ;
+	void setVal(double val_);
+	double getVal() const;
+	std::size_t size() const;
+	static bool cmp(const chromosome& first,const chromosome& second);
+	private:
+	std::vector<int> MChromosome;
+	double val;
+};
 namespace time_concept{
 class time_bucket{
 	public:
@@ -44,9 +57,9 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 	GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_);
 	virtual void run() override;
 
-	population_t initPop(size_t popSize);
+	virtual population_t initPop(size_t popSize,std::size_t chromosome_size);
 	double schedule(chromosome ind);
-	double objectiveFunction(chromosome ind);
+	double objectiveFunction(chromosome& ind);
 	population_t selectParents(population_t pop);
 	population_t crossover(population_t selectedParents);
 	chromosome mutate(chromosome& ind,double mutateP);
@@ -65,19 +78,8 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 								std::map<_DataLoad::job::resource_t,
 									time_concept::time_bucket::time_line>& time_line_for_resource,
 								const no_job_t& scheduled_activities);
-};
-class chromosome
-{
-	public:
-	chromosome(std::size_t size_):MChromosome(size_){}
-	int& operator[](size_t location);
-	const int& operator[](size_t location) const ;
-	void setVal(double val_);
-	double getVal() const;
-	std::size_t size() const;
 	private:
-	std::vector<int> MChromosome;
-	double val;
+	chromosome best_res;
 };
 namespace time_concept{
 

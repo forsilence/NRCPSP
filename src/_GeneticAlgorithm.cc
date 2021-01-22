@@ -1,21 +1,28 @@
 # include"../include/_GeneticAlgorithm.h"
 # include<ctime>
+# include<climits>
 # include<vector>
 # include<iostream>
 # include<iterator>
 namespace _HeuristicAlgorithm
 {
-GeneticAlgorithm::GeneticAlgorithm():BaseGeneticAlgorithm(){}
-GeneticAlgorithm::GeneticAlgorithm(const int popSize_):BaseGeneticAlgorithm(popSize_){}
-GeneticAlgorithm::GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_):BaseGeneticAlgorithm(popSize_,maxGeneration_,mutateP_){}
+GeneticAlgorithm::GeneticAlgorithm():BaseGeneticAlgorithm(),best_res(2){
+	best_res.setVal(INT_MAX);
+}
+GeneticAlgorithm::GeneticAlgorithm(const int popSize_):BaseGeneticAlgorithm(popSize_),best_res(2){
+	best_res.setVal(INT_MAX);
+}
+GeneticAlgorithm::GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_):BaseGeneticAlgorithm(popSize_,maxGeneration_,mutateP_),best_res(2){
+	best_res.setVal(INT_MAX);
+}
 void GeneticAlgorithm::run()
 {
-	// std::cout << ">>> GeneticAlgorithm <<<" << std::endl;
-	// load(dataFilePath);
-	// auto all_jobs_ = get_all_jobs_map();
-	// for (auto job:all_jobs_){
-	// 	logWriteIn(job.second.toString());
-	// }
+	std::cout << ">>> GeneticAlgorithm <<<" << std::endl;
+	load(dataFilePath);
+	auto all_jobs_ = get_all_jobs_map();
+	for (auto job:all_jobs_){
+		logWriteIn(job.second.toString());
+	}
 	// auto allJobs = get_all_jobs_map();
 	// // init pop
 	// std::vector<chromosome> pop = initPop(popSize);
@@ -41,7 +48,7 @@ double GeneticAlgorithm::schedule(chromosome ind)
 {
 	std::vector<_DataLoad::job::number_t> ts = topological_sort(ind);
 	auto res = evaluate(ts,ind);
-	return res.rbegin()->second.get_ef();
+	return res.find(res.size())->second.get_ef();
 }
 std::vector<_DataLoad::job::number_t> GeneticAlgorithm::topological_sort(chromosome ind)
 {
@@ -319,6 +326,36 @@ void GeneticAlgorithm::set_time(_DataLoad::job& activity,
 	}
 }
 
+double GeneticAlgorithm::objectiveFunction(chromosome& ind){
+	double scheduled_res = schedule(ind);
+	return 0;
+}
+
+GeneticAlgorithm::population_t GeneticAlgorithm::initPop(
+	std::size_t popSize,
+	std::size_t chromosome_size){
+	unsigned randSeed = (unsigned)time(NULL)*100;
+	srand(randSeed);
+	logWriteIn("initPop");
+	chromosome prototype(chromosome_size);
+	population_t pop;
+	// random init popSize individuals for pop
+	for(int ind=0 ; ind < popSize ; ++ind){
+		for(int gene=0 ; gene<chromosome_size ; ++gene){
+			prototype[gene]=Uniform(0,9);
+		}
+		double schedule_res = schedule(prototype);
+		prototype.setVal(schedule_res);
+		if (chromosome::cmp(prototype,best_res)){
+			best_res = prototype;
+			logWriteIn(std::to_string(best_res.getVal()));
+		}
+		pop.push_back(prototype);
+	}
+	logWriteIn(std::to_string(best_res.getVal()));
+	return pop;
+}
+
 // >>>chromosome<<<
 int& chromosome::operator[](size_t location)
 {
@@ -329,5 +366,14 @@ const int& chromosome::operator[](size_t location) const {
 }
 std::size_t chromosome::size()const {
 	return this->MChromosome.size();
+}
+bool chromosome::cmp(const chromosome& first,const chromosome& second){
+	return first.getVal() < second.getVal();
+}
+void chromosome::setVal(double val_){
+	this->val = val_;
+}
+double chromosome::getVal() const {
+	return val;
 }
 }// _HeuristicAlgorithm
