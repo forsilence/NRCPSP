@@ -397,6 +397,20 @@ GeneticAlgorithm::population_t GeneticAlgorithm::selectParents(const population_
 	return selected_parents;
 }
 
+GeneticAlgorithm::population_t GeneticAlgorithm::crossover(const population_t& selectParents){
+	chromosome child1 = selectParents[0];
+	chromosome child2 = selectParents[1];
+	int cross_locations[2];
+	for(int& cross_location:cross_locations){
+		cross_location = Uniform(0,child1.size());
+	}
+	for(int start=std::min(cross_locations[0],cross_locations[1]);start < std::max(cross_locations[0],cross_locations[1]);++start){
+		child1[start]=selectParents[1][start];
+		child2[start]=selectParents[0][start];
+	}
+	return population_t{child1,child2};
+}
+
 // >>>chromosome<<<
 int& chromosome::operator[](size_t location)
 {
