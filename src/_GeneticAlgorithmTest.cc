@@ -147,6 +147,33 @@ void GAMutateTest::run_test(){
   time_t take_time = clock() - t;
   std:: cout << pop_size << " inds take time is " << take_time/CLOCKS_PER_SEC << std::endl;
 }
+
+void GAPopSortTest::run_test(){
+  GeneticAlgorithm Ga;
+  std::string loadfile = "./data/j30.sm/j301_3.sm";
+  Ga.setLoadFile(loadfile);
+  Ga.load(loadfile);
+  Ga.setLogWriterPath("./data/j30.sm.rs/j301_3.sm.csv");
+  chromosome ind(32);
+  for(int i=0;i<ind.size();++i){
+    ind[i]=Ga.Uniform(0,9);
+  }
+  Ga.InitRandomSeed();
+  time_t t = clock();
+  std::size_t pop_size = 20;
+  auto pop = Ga.initPop(pop_size,32);
+  for(auto ind:pop){
+    Ga.logWriteIn(std::to_string(ind.getVal())+" ");
+  }
+  Ga.popSort(pop);
+  Ga.logWriteIn("popSort");
+  for(auto ind:pop){
+    Ga.logWriteIn(std::to_string(ind.getVal())+" ");
+  }
+  time_t take_time = clock() - t;
+  std:: cout << pop_size << " inds take time is " << take_time/CLOCKS_PER_SEC << std::endl;
+
+}
 } // namespace Test
 
 } // namespace _HeuristicAlgorithm

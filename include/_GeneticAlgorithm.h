@@ -63,7 +63,7 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 	virtual population_t selectParents(const population_t& pop);
 	virtual population_t crossover(const population_t& selectedParents);
 	virtual void mutate(chromosome& ind,double mutateP);
-	population_t popSort(population_t pop);
+	virtual void popSort(population_t& pop);
 	void update_cut_set(const no_job_t& sorted_activities, cut_set_t& cut_set,_DataLoad::job::number_t job_no);
 	no_job_t::iterator max_priority( no_job_t& pr_queue,const chromosome& gene);
 	void update_priority_activities(const no_job_t& sorted_activities,
@@ -78,6 +78,8 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 								std::map<_DataLoad::job::resource_t,
 									time_concept::time_bucket::time_line>& time_line_for_resource,
 								const no_job_t& scheduled_activities);
+	void in_quik_sort(population_t& pop,int start,int end);
+	std::size_t in_quik_sort_partition(population_t& pop,int start,int end); 
 	private:
 	chromosome best_res;
 };

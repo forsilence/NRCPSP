@@ -421,7 +421,29 @@ void GeneticAlgorithm::mutate(chromosome& ind,double mutateP){
 		}
 	}
 }
+void GeneticAlgorithm::popSort(population_t& pop){
+	in_quik_sort(pop,0,pop.size()-1);
+}
 
+void GeneticAlgorithm::in_quik_sort(population_t& pop,int start,int end){
+	if(start<end){
+		int split_loc = in_quik_sort_partition(pop,start,end);
+		in_quik_sort(pop,start,split_loc-1);
+		in_quik_sort(pop,split_loc+1,end);
+	}
+}
+
+std::size_t GeneticAlgorithm::in_quik_sort_partition(population_t& pop,int start,int end){
+	auto flag = pop[end].getVal();
+	int slower = start - 1;
+	for(int i=start ; i<end ; ++i){
+		if(pop[i].getVal()<flag){
+			std::swap(pop[i],pop[++slower]);
+		}
+	}
+	std::swap(pop[++slower],pop[end]);
+	return slower;
+}
 // >>>chromosome<<<
 int& chromosome::operator[](size_t location)
 {

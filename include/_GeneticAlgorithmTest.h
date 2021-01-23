@@ -25,6 +25,10 @@ class GAMutateTest: public TestBase{
   public:
   void run_test() override ;
 };
+class GAPopSortTest: public TestBase{
+  public:
+  void run_test() override ;
+};
 } // namespace Test
 
 } // namespace _HeuristicAlgorithm
