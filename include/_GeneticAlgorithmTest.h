@@ -17,6 +17,10 @@ class GASelectParents: public TestBase{
   public:
   void run_test() override ;
 };
+class GACrossoverTest: public TestBase{
+  public:
+  void run_test() override ;
+};
 } // namespace Test
 
 } // namespace _HeuristicAlgorithm

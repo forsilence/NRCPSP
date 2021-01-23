@@ -62,7 +62,7 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 	double objectiveFunction(chromosome& ind);
 	virtual population_t selectParents(const population_t& pop);
 	virtual population_t crossover(const population_t& selectedParents);
-	chromosome mutate(chromosome& ind,double mutateP);
+	virtual void mutate(chromosome& ind,double mutateP);
 	population_t popSort(population_t pop);
 	void update_cut_set(const no_job_t& sorted_activities, cut_set_t& cut_set,_DataLoad::job::number_t job_no);
 	no_job_t::iterator max_priority( no_job_t& pr_queue,const chromosome& gene);
