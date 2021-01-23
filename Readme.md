@@ -19,3 +19,7 @@ GA.setMaxGeneration(maxG);
 GA.setPopSize(popsize);
 GA.run();
 ```
+> or in cmd(Windows)
+```
+NRCPSP\built_files\>GAForRCPSP-0 ../data/j60.sm/j601_2.sm ../data/j60.sm.rs/j601_2.csv 100 30
+```
