@@ -1,4 +1,5 @@
 # include"../include/_GeneticAlgorithm.h"
+# include"../include/_M_processing_line.h"
 # include<ctime>
 # include<climits>
 # include<vector>
@@ -18,30 +19,44 @@ GeneticAlgorithm::GeneticAlgorithm(const int popSize_,const int maxGeneration_,c
 void GeneticAlgorithm::run()
 {
 	std::cout << ">>> GeneticAlgorithm <<<" << std::endl;
+	// record time
+	time_t t = clock();
+	unsigned random_seed = InitRandomSeed();
 	load(dataFilePath);
+	logWriteIn("rand-seed "+std::to_string(random_seed));
+	logWriteIn("gsize "+std::to_string(maxGeneration));
+	logWriteIn("popsize "+std::to_string(popSize));
+	logWriteIn("cp "+std::to_string(crossoverP));
+	logWriteIn("mp "+std::to_string(mutateP));
 	auto all_jobs_ = get_all_jobs_map();
-	for (auto job:all_jobs_){
-		logWriteIn(job.second.toString());
+	best_res.setVal(INT_MAX);
+	auto allJobs = get_all_jobs_map();
+	// init pop
+	std::vector<chromosome> pop = initPop(popSize,allJobs.size());
+	for(int Generationloop=0; Generationloop<maxGeneration;++Generationloop){
+		// population_t newGeneration;
+		print_line(Generationloop+1,maxGeneration);
+		for(int inGenerationLoop=0;inGenerationLoop<popSize*crossoverP;++inGenerationLoop){
+			population_t selectedParents = selectParents(pop);
+			population_t children = crossover(selectedParents);
+			for(int child=0;child<children.size();++child){
+				mutate(children[child], mutateP);
+				// push child to newGeneration
+				// newGeneration.push_back(children[child]);
+				children[child].setVal(schedule(children[child]));
+				pop.push_back(children[child]);
+				if(chromosome::cmp(children[child],best_res)){
+					best_res = children[child];
+				}
+			}
+		}
+		popSort(pop);
+		logWriteIn(std::to_string(pop[pop.size()-1].getVal()));
+		for(int delLoop=0 ; delLoop < pop.size() - popSize ; ++delLoop){
+			pop.erase(pop.begin());
+		}
 	}
-	// auto allJobs = get_all_jobs_map();
-	// // init pop
-	// std::vector<chromosome> pop = initPop(popSize);
-	// for(int Generationloop=0; Generationloop<maxGeneration;++Generationloop){
-	// 	population_t newGeneration;
-	// 	for(int inGenerationLoop=0;inGenerationLoop<popSize*crossoverP;++inGenerationLoop){
-	// 		population_t selectedParents = selectParents(pop);
-	// 		population_t children = crossover(selectedParents);
-	// 		for(int child=0;child<children.size();++child){
-	// 			mutate(children[child], mutateP);
-	// 			// push child to newGeneration
-	// 			newGeneration.push_back(children[child]);
-	// 		}
-	// 	}
-	// 	pop = popSort(pop);
-	// 	for(int delLoop=0 ; delLoop < pop.size() - popSize ; ++delLoop){
-	// 		pop.erase(pop.begin());
-	// 	}
-	// }
+	logWriteIn("runtime "+std::to_string((clock()-t)/CLOCKS_PER_SEC));
 }
 // need to finish
 double GeneticAlgorithm::schedule(chromosome ind)
@@ -344,7 +359,6 @@ GeneticAlgorithm::population_t GeneticAlgorithm::initPop(
 	std::size_t chromosome_size){
 	unsigned randSeed = (unsigned)time(NULL)*100;
 	srand(randSeed);
-	logWriteIn("initPop");
 	chromosome prototype(chromosome_size);
 	population_t pop;
 	// random init popSize individuals for pop
@@ -437,7 +451,7 @@ std::size_t GeneticAlgorithm::in_quik_sort_partition(population_t& pop,int start
 	auto flag = pop[end].getVal();
 	int slower = start - 1;
 	for(int i=start ; i<end ; ++i){
-		if(pop[i].getVal()<flag){
+		if(pop[i].getVal()>flag){
 			std::swap(pop[i],pop[++slower]);
 		}
 	}
