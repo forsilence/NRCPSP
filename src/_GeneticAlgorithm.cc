@@ -413,7 +413,7 @@ GeneticAlgorithm::population_t GeneticAlgorithm::crossover(const population_t& s
 
 void GeneticAlgorithm::mutate(chromosome& ind,double mutateP){
 	for(int gene=0 ; gene<ind.size() ; ++gene){
-		if(mutateP<Uniform(0,1)){
+		if(mutateP>Uniform(0,1)){
 			ind[gene] += Uniform(-1,1);
 			if(ind[gene]<0){
 				ind[gene] = 0;
