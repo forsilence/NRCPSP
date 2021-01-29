@@ -80,11 +80,11 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 								const no_job_t& scheduled_activities);
 	void in_quik_sort(population_t& pop,int start,int end);
 	std::size_t in_quik_sort_partition(population_t& pop,int start,int end); 
-	private:
+	protected:
 	chromosome best_res;
 };
-namespace time_concept{
+namespace extract_function_from_GA{
 
-}// time_concept
+} // extract_function_from_GA
 }// _HeuristicAlgorithm
 # endif
