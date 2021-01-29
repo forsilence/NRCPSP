@@ -1,0 +1,16 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+D:/c++/NRCPSP/include/_M_processing_line.h
+cstdio
+-
+
+D:/c++/NRCPSP/src/_M_processing_line.cc
+../include/_M_processing_line.h
+D:/c++/NRCPSP/include/_M_processing_line.h
+
