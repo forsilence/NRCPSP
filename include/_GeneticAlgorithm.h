@@ -58,7 +58,7 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 	virtual void run() override;
 
 	virtual population_t initPop(size_t popSize,std::size_t chromosome_size);
-	double schedule(chromosome ind);
+	double schedule(const chromosome& ind);
 	double objectiveFunction(chromosome& ind);
 	virtual population_t selectParents(const population_t& pop);
 	virtual population_t crossover(const population_t& selectedParents);
@@ -71,8 +71,8 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 																	no_job_t& free_activities,
 																	no_job_t& priority_queue);
 	bool eligible(const no_job_t& ,const _DataLoad::job& );
-	std::vector<_DataLoad::job::number_t> topological_sort(chromosome& ind);// tempral constrain
-	no_job_t evaluate( std::vector<_DataLoad::job::number_t> topological_sort_res,
+	std::vector<_DataLoad::job::number_t> topological_sort(const chromosome& ind);// tempral constrain
+	no_job_t evaluate( const std::vector<_DataLoad::job::number_t>& topological_sort_res,
 											const chromosome& gene);// resource constrain
 	void set_time(_DataLoad::job& activity,
 								std::map<_DataLoad::job::resource_t,
