@@ -71,7 +71,7 @@ class GeneticAlgorithm: public BaseGeneticAlgorithm
 																	no_job_t& free_activities,
 																	no_job_t& priority_queue);
 	bool eligible(const no_job_t& ,const _DataLoad::job& );
-	std::vector<_DataLoad::job::number_t> topological_sort(chromosome ind);// tempral constrain
+	std::vector<_DataLoad::job::number_t> topological_sort(chromosome& ind);// tempral constrain
 	no_job_t evaluate( std::vector<_DataLoad::job::number_t> topological_sort_res,
 											const chromosome& gene);// resource constrain
 	void set_time(_DataLoad::job& activity,

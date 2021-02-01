@@ -59,13 +59,13 @@ void GeneticAlgorithm::run()
 	logWriteIn("runtime "+std::to_string((clock()-t)/CLOCKS_PER_SEC));
 }
 // need to finish
-double GeneticAlgorithm::schedule(chromosome ind)
+double GeneticAlgorithm::schedule(const chromosome& ind)
 {
 	std::vector<_DataLoad::job::number_t> ts = topological_sort(ind);
 	auto res = evaluate(ts,ind);
 	return res.find(res.size())->second.get_ef();
 }
-std::vector<_DataLoad::job::number_t> GeneticAlgorithm::topological_sort(chromosome ind)
+std::vector<_DataLoad::job::number_t> GeneticAlgorithm::topological_sort(const chromosome& ind)
 {
 	// init
 	no_job_t free_activities = get_all_jobs_map();
@@ -175,7 +175,7 @@ bool GeneticAlgorithm::eligible(const no_job_t& sorted_activities,const _DataLoa
 
 // need to finish
 GeneticAlgorithm::no_job_t GeneticAlgorithm::evaluate(  
-	std::vector<_DataLoad::job::number_t> topological_sort_res,
+	const std::vector<_DataLoad::job::number_t>& topological_sort_res,
   const chromosome& gene)
 {
 	no_job_t all_jobs = get_all_jobs_map();
