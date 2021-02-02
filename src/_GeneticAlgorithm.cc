@@ -478,4 +478,15 @@ void chromosome::setVal(double val_){
 double chromosome::getVal() const {
 	return val;
 }
+bool chromosome::equals(const chromosome& a,const chromosome& b){
+	if(a.size() != b.size()){
+		return false;
+	}
+	for(int loc=0 ; loc<a.size(); ++loc){
+		if(a[loc]!=b[loc]){
+			return false;
+		}
+	}
+	return true;
+}
 }// _HeuristicAlgorithm
