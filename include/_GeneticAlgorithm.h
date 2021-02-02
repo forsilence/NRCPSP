@@ -16,6 +16,7 @@ class chromosome
 	double getVal() const;
 	std::size_t size() const;
 	static bool cmp(const chromosome& first,const chromosome& second);
+	static bool equals(const chromosome& a,const chromosome& b);
 	private:
 	std::vector<int> MChromosome;
 	double val;
