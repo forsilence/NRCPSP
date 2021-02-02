@@ -1,6 +1,7 @@
 ## resource-constrained project scheduling problem
  new project for RCPSP
- compare to RCPSP ,this project run faster and provide more basic operations for further algorithms
+ compare to RCPSP ,this project run faster and provide more basic operations for further algorithms  
+ 进化优化算法--基于仿生和种群的计算机智能方法<reference>
 #### class introduction
 * _DataLoad::infor_loader
 > load data
