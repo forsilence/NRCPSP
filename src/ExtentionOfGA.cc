@@ -1,6 +1,7 @@
 # include"../include/extensionOfGA.h"
 # include<ctime>
 # include"../include/_M_processing_line.h"
+# include"../include/_Template_GA.h"
 namespace _HeuristicAlgorithm
 {
 // stable GA
@@ -77,5 +78,55 @@ std::vector<int> stableGA::selectParents(population_t& pop){
 		--count;
 	}
 	return selected_parents;
+}
+
+// >>> diversityGA
+void diversityGA::run(){
+	std::cout << ">>> diversity GeneticAlgorithm <<<" << std::endl;
+	// record time
+	time_t t = clock();
+	unsigned random_seed = InitRandomSeed();
+	load(dataFilePath);
+	logWriteIn("rand-seed "+std::to_string(random_seed));
+	logWriteIn("gsize "+std::to_string(maxGeneration));
+	logWriteIn("popsize "+std::to_string(popSize));
+	logWriteIn("cp "+std::to_string(crossoverP));
+	logWriteIn("mp "+std::to_string(mutateP));
+	auto all_jobs_ = get_all_jobs_map();
+	best_res.setVal(INT_MAX);
+	auto allJobs = get_all_jobs_map();
+	// init pop
+	std::vector<chromosome> pop = initPop(popSize,allJobs.size());
+	Template::RepeatIn<population_t,population_t::value_type> repeatIn;
+	for(int Generationloop=0; Generationloop<maxGeneration;++Generationloop){
+		// population_t newGeneration;
+		print_line(Generationloop+1,maxGeneration);
+		for(int inGenerationLoop=0;inGenerationLoop<popSize*crossoverP;++inGenerationLoop){
+			population_t selectedParents = selectParents(pop);
+			population_t children = crossover(selectedParents);
+
+			for(int child=0;child<children.size();++child){
+				mutate(children[child], mutateP);
+				// push child to newGeneration
+				// newGeneration.push_back(children[child]);
+				children[child].setVal(schedule(children[child]));
+				// check if schild is repeated
+				if(!repeatIn(pop,children[child])){
+					pop.push_back(children[child]);
+					if(chromosome::cmp(children[child],best_res)){
+						best_res = children[child];
+					}
+				}
+			}
+		}
+		if(pop.size() > popSize){
+			popSort(pop);
+			logWriteIn(std::to_string(pop[pop.size()-1].getVal()));
+		}
+		for(int delLoop=0 ; delLoop < pop.size() - popSize ; ++delLoop){
+			pop.erase(pop.begin());
+		}
+	}
+	logWriteIn("runtime "+std::to_string((clock()-t)/CLOCKS_PER_SEC));
 }
 }// _HeuristicAlgorithm
