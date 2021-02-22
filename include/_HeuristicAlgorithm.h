@@ -135,15 +135,22 @@ class defaultGene
 class HeuristicAlgorithmBase: public _DataLoad::infor_loader
 {
     public:
-    HeuristicAlgorithmBase() = default;
+    HeuristicAlgorithmBase(std::string name_):name(name_),logWriter(){}
     virtual void run();
     void setLogWriterPath(std::string );
     void logWriteIn(std::string );
     void setLogBufferSize(size_t BSize);
+		void into_file(){
+			logWriter.in_to_file();
+		}
     double Uniform(double min_,double max_);
 		unsigned InitRandomSeed();
+		std::string getName() const;
+		void setName(std::string name);
     private:
     _M_th::text_writer logWriter;
+		protected:
+		std::string name;
 };
 }// _HeuristicAlgorithm
 # endif

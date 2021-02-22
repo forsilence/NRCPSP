@@ -297,4 +297,12 @@ unsigned HeuristicAlgorithmBase::InitRandomSeed(){
 	srand(random_seed);
 	return random_seed;
 }
+
+std::string HeuristicAlgorithmBase::getName() const {
+	return name;
+}
+
+void HeuristicAlgorithmBase::setName(std::string name_){
+	name = name_;
+}
 }// _HeuristicAlgorithm

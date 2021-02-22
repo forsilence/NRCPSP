@@ -1,12 +1,21 @@
 # if ! defined(_EXTENIONOFGA_H)
-# define _EXTENSIONOFGA_H
+# define _EXTENIONOFGA_H
 # include"_GeneticAlgorithm.h"
 namespace _HeuristicAlgorithm
 {
 class stableGA : public GeneticAlgorithm{
   public:
+  stableGA():GeneticAlgorithm(){
+    name = "stable-GA";
+  }
+  stableGA(const int popSize_):GeneticAlgorithm(popSize_){
+    name = "stable-GA";
+  }
+  stableGA(const int popSize_,const int maxGeneration_,const double mutateP_):GeneticAlgorithm(popSize_,maxGeneration_, mutateP_){
+    name = "stable-GA";
+  }
   virtual void run() override;
-  virtual std::vector<int> selectParents(population_t& pop);
+  std::vector<int> selectParents_stable(const population_t& pop);
 };
 
 /**
@@ -20,6 +29,15 @@ class stableGA : public GeneticAlgorithm{
  */
 class diversityGA: public GeneticAlgorithm{
   public:
+  diversityGA():GeneticAlgorithm(){
+    name = "diversity-GA";
+  }
+  diversityGA(const int popSize_):GeneticAlgorithm(popSize_){
+    name = "diversity-GA";
+  }
+  diversityGA(const int popSize_,const int maxGeneration_,const double mutateP_):GeneticAlgorithm(popSize_,maxGeneration_, mutateP_){
+    name = "diversity-GA";
+  }
   virtual void run() override;
 };
 

@@ -7,13 +7,13 @@
 # include<iterator>
 namespace _HeuristicAlgorithm
 {
-GeneticAlgorithm::GeneticAlgorithm():BaseGeneticAlgorithm(),best_res(2){
+GeneticAlgorithm::GeneticAlgorithm():BaseGeneticAlgorithm("GeneticAlgorithm"),best_res(2){
 	best_res.setVal(INT_MAX);
 }
-GeneticAlgorithm::GeneticAlgorithm(const int popSize_):BaseGeneticAlgorithm(popSize_),best_res(2){
+GeneticAlgorithm::GeneticAlgorithm(const int popSize_):BaseGeneticAlgorithm("GeneticAlgorithm",popSize_),best_res(2){
 	best_res.setVal(INT_MAX);
 }
-GeneticAlgorithm::GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_):BaseGeneticAlgorithm(popSize_,maxGeneration_,mutateP_),best_res(2){
+GeneticAlgorithm::GeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_):BaseGeneticAlgorithm("GeneticAlgorithm",popSize_,maxGeneration_,mutateP_),best_res(2){
 	best_res.setVal(INT_MAX);
 }
 void GeneticAlgorithm::run()
@@ -23,6 +23,7 @@ void GeneticAlgorithm::run()
 	time_t t = clock();
 	unsigned random_seed = InitRandomSeed();
 	load(dataFilePath);
+	logWriteIn("Algorithm type " + name);
 	logWriteIn("rand-seed "+std::to_string(random_seed));
 	logWriteIn("gsize "+std::to_string(maxGeneration));
 	logWriteIn("popsize "+std::to_string(popSize));

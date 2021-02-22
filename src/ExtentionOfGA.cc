@@ -14,6 +14,7 @@ void stableGA::run(){
 	time_t t = clock();
 	unsigned random_seed = InitRandomSeed();
 	load(dataFilePath);
+	logWriteIn("Algorithm type " + name);
 	logWriteIn("rand-seed "+std::to_string(random_seed));
 	logWriteIn("gsize "+std::to_string(maxGeneration));
 	logWriteIn("popsize "+std::to_string(popSize));
@@ -28,7 +29,7 @@ void stableGA::run(){
   for(int generation=0 ; generation<maxGeneration; ++generation){
 		print_line(generation+1,maxGeneration);
     for(int inGenerationLoop=0 ; inGenerationLoop<size_for_one_generation/2 ; ++inGenerationLoop){
-      std::vector<int> selectedParents = selectParents(pop);
+      std::vector<int> selectedParents = selectParents_stable(pop);
       auto children = crossover(population_t{pop[selectedParents[0]],pop[selectedParents[1]]});
       for(int child=0 ; child<children.size() ; ++child){
         mutate(children[child],mutateP);
@@ -47,7 +48,7 @@ void stableGA::run(){
   logWriteIn("runtime "+std::to_string((clock()-t)/CLOCKS_PER_SEC));
 }
 
-std::vector<int> stableGA::selectParents(population_t& pop){
+std::vector<int> stableGA::selectParents_stable(const population_t& pop){
 	double sum = 0;
 	for(const population_t::value_type& it:pop){
 		sum += it.getVal();
@@ -87,6 +88,7 @@ void diversityGA::run(){
 	time_t t = clock();
 	unsigned random_seed = InitRandomSeed();
 	load(dataFilePath);
+	logWriteIn("Algorithm type " + name);
 	logWriteIn("rand-seed "+std::to_string(random_seed));
 	logWriteIn("gsize "+std::to_string(maxGeneration));
 	logWriteIn("popsize "+std::to_string(popSize));

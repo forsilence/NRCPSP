@@ -8,10 +8,10 @@ namespace _HeuristicAlgorithm
 class BaseGeneticAlgorithm: public HeuristicAlgorithmBase
 {
 public:
-BaseGeneticAlgorithm();
-BaseGeneticAlgorithm(const int popSize_);
-BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_);
-BaseGeneticAlgorithm(const int popSize_,const int maxGeneration_,const double mutateP_,const double crossoverP_);
+BaseGeneticAlgorithm(std::string);
+BaseGeneticAlgorithm(std::string,const int popSize_);
+BaseGeneticAlgorithm(std::string,const int popSize_,const int maxGeneration_,const double mutateP_);
+BaseGeneticAlgorithm(std::string,const int popSize_,const int maxGeneration_,const double mutateP_,const double crossoverP_);
 
 void setPopSize(int const popSize_);
 void setMaxGeneration(int const maxGeneration_);
