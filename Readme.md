@@ -36,3 +36,37 @@ GA.run();
 ```
 NRCPSP\built_files\>GAForRCPSP-0 ../data/j60.sm/j601_2.sm ../data/j60.sm.rs/j601_2.csv 100 30
 ```
+* rcpsp : command with some type algorithms
+> use format : rcpsp -I input_file -O Output_file(d for default outputfile) -G max_generation -P pop_size -M mutate_probility -C crossover_probility  
+> use example :
+```
+NRCPSP\built_files\>rcpsp -I ../data/j60.sm/j601_2.sm  -O ../data/j60.sm.rs/j601_2.csv -G 100 -P 30 -M 0.01 -C 0.6
+```
+
+* main : use to handle command using to handle file
+> It has 4 modes now  (-S single file mode, -SM single file run multi times , -M multi files mode , -MM multi files run multi times for each )  
+> -S , you should run like : main command -S file with preargs -args args  
+> example : use GAForRCPSP-0  
+``` 
+NRCPSP\built_files\>main GAForRCPSP-0 -S ../data/j60.sm/j601_2.sm -args ../data/j60.sm.rs/j601_2.csv 100 30
+```
+> -SM , run format : main command -SM file with preargs -args args run_times
+> example : use GAForRCPSP-0  
+```
+NRCPSP\built_files\>main GAForRCPSP-0 -SM ../data/j60.sm/j601_2.sm -args ../data/j60.sm.rs/j601_2.csv 100 30 4
+```
+> -M , run format : main command -M directory_path with preargs -args args  
+> example : rcpsp
+```
+NRCPSP\built_files\>main rcpsp -M  -I ../data/j60.sm -args -O d  -G 100 -p 30
+```
+> -MM , run format : main command -MM directory_path with preargs -args args run_times  
+> example : rcpsp
+```
+NRCPSP\built_files\>main rcpsp -MM  -I ../data/j60.sm -args -O d  -G 100 -p 30 4
+```
+> how to use main  
+```
+> main command -[mode] [preargs] path [-args args]
+NRCPSP\built_files\>main rcpsp -S -I ../data/j60.sm/j601_2.sm  -args -O d -A stable  -G 100 -P 25 -M 0.01 -C 0.5
+```
