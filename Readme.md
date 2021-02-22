@@ -37,7 +37,9 @@ GA.run();
 NRCPSP\built_files\>GAForRCPSP-0 ../data/j60.sm/j601_2.sm ../data/j60.sm.rs/j601_2.csv 100 30
 ```
 * rcpsp : command with some type algorithms
-> use format : rcpsp -I input_file -O Output_file(d for default outputfile) -G max_generation -P pop_size -M mutate_probility -C crossover_probility  
+> use format : rcpsp -A stable -I input_file -O Output_file(d for default outputfile) -G max_generation -P pop_size -M mutate_probility -C crossover_probility  
+> -A can follow with stable , diversity or don't add , it will be the default algorithm  
+> only -I is neccessary
 > use example :
 ```
 NRCPSP\built_files\>rcpsp -I ../data/j60.sm/j601_2.sm  -O ../data/j60.sm.rs/j601_2.csv -G 100 -P 30 -M 0.01 -C 0.6
