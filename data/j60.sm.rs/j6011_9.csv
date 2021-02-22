@@ -1,0 +1,25 @@
+Algorithm type stable-GA
+rand-seed 2214907548
+gsize 60
+popsize 20
+cp 0.500000
+mp 0.020000
+74.000000
+69.000000
+68.000000
+62.000000
+62.000000
+runtime 1
+Algorithm type diversity-GA
+rand-seed 2214925768
+gsize 1
+popsize 20
+cp 0.500000
+mp 0.020000
+74.000000
+68.000000
+63.000000
+62.000000
+62.000000
+62.000000
+runtime 0
